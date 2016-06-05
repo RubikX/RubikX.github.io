@@ -1,3 +1,3 @@
 <span id="a">root@rubikx</span>:<span id="b">~</span><span id="c">$</span> cat rubikx.txt<br/><br/>
 Greetings, I am RubikX. <!-- laglaglaglaglaglaglaglaglaglaglaglag -->Welcome to my website!
-<p>I am currently studying Computing Sciences at a Canadian University. </p><!-- qowifjqwoeijfoqweijfqweoifjqweofijqweoqwoijefoqwijefoijfqiwoefjj --><!- oqwipjefqwioefjwioqfjoiqwjfeioqwjefoi -->
+I am currently studying Computing Sciences at a Canadian University.
