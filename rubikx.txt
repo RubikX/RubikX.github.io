@@ -1,4 +1,4 @@
 <span id="a">root@rubikx</span>:<span id="b">~</span><span id="c">$</span> cat rubikx.txt<br/><br/>
 Greetings, I am RubikX.<!-- laglaglaglaglaglaglaglaglaglaglaglag -->I am studying Computing Sciences at a Canadian University.<!-- qowifjqwoeijfoqweijfqweoifjqweofijqweoqwoijefoqwijefoijfqiwoefjj -->
-I am a computer enthusiast and very Mr. Reece.<!- oqwipjefqwioefjwioqfjoiqwjfeioqwjefoi -->
-<p>I love to read, listen to music, and travel.</p><!-- owlsqweoifjqwoefijqwoeifjqwoefijwef -->
+I am a computer enthusiast.<!- oqwipjefqwioefjwioqfjoiqwjfeioqwjefoi -->
+<p>I love to read and listen to music.</p><!-- owlsqweoifjqwoefijqwoeifjqwoefijwef -->
