@@ -1,5 +1,5 @@
 <span id="a">root@rubikx</span>:<span id="b">~</span><span id="c">$</span> cat rubikx.txt<br/><br/>
-Greetings, I am RubikX. <!-- laglaglaglaglaglaglaglaglaglaglaglag -->Welcome to my website
+Greetings, I am RubikX. <!-- laglaglaglaglaglaglaglaglaglaglaglag -->Welcome to my website!
 <p>I am studying Computing Sciences at a Canadian University. </p><!-- qowifjqwoeijfoqweijfqweoifjqweofijqweoqwoijefoqwijefoijfqiwoefjj -->
 I am a computer enthusiast.<!- oqwipjefqwioefjwioqfjoiqwjfeioqwjefoi -->
 <p>I love to read and listen to music.</p><!-- owlsqweoifjqwoefijqwoeifjqwoefijwef -->
