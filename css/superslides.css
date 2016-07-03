@@ -46,7 +46,7 @@
 }
 .slides-pagination a {
   width: 15px;
-  height: 5px;
+  height: 10px;
   display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
