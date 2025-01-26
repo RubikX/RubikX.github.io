@@ -1,173 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Games Today</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    <!-- Basic Page Needs
-    ================================================== -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-     <title>RubikX - Home</title>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    <!-- Mobile Specific Metas
-    ================================================== -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        @keyframes loadingPulse {
+            0% { background-color: #2a2a2a; }
+            50% { background-color: #333333; }
+            100% { background-color: #2a2a2a; }
+        }
 
-    <!-- Favicon -->
-    <link href="https://raw.githubusercontent.com/RubikX/RubikX.github.io/master/favicon.ico" rel="icon" type="image/x-icon" />
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
 
-    <!-- CSS
-    ================================================== -->       
-    <!-- Bootstrap css file-->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font awesome css file-->
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <!-- Superslide css file-->
-    <link rel="stylesheet" href="css/superslides.css">
-    <!-- Slick slider css file -->
-    <link href="css/slick.css" rel="stylesheet"> 
-    <!-- smooth animate css file -->
-    <link rel="stylesheet" href="css/animate.css">  
-    <!-- Elastic grid css file -->
-    <link rel="stylesheet" href="css/elastic_grid.css"> 
-    <!-- Circle counter cdn css file -->
-    <link rel='stylesheet prefetch' href='https://cdn.rawgit.com/pguso/jquery-plugin-circliful/master/css/jquery.circliful.css'>    
-    <!-- Default Theme css file -->
-    <link id="orginal" href="css/themes/default-theme.css" rel="stylesheet">
-    <!-- Main structure css file -->
-    <link href="style.css" rel="stylesheet">
-   
-    <!-- Google fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Varela' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+        .tile {
+            background-color: #1e1e1e;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeIn 0.6s ease-out;
+            position: relative;
+        }
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body> 
-     <!-- BEGAIN PRELOADER -->
-    <div id="preloader">
-      <div id="status">&nbsp;</div>
-    </div>
-    <!-- END PRELOADER -->
+        .tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+        }
 
-    <!-- SCROLL TOP BUTTON -->
-    <a class="scrollToTop" href="#"><i class="fa fa-angle-up"></i></a>
-    <!-- END SCROLL TOP BUTTON -->
+        .status-tag {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            z-index: 1;
+        }
 
-    <!--=========== BEGIN HEADER SECTION ================-->
-    <header id="header">
-      <!-- BEGIN MENU -->
-      <div class="menu_area">
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation"> 
-          <div class="container">
-          <div class="navbar-header">
-            <!-- FOR MOBILE VIEW COLLAPSED BUTTON -->
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            
-                   
-          </div>
-          <div id="navbar" class="navbar-collapse collapse">
-            <ul id="top-menu" class="nav navbar-nav navbar-right main_nav">
-              <li class="active"><a href="#">Home</a></li>     
-			  <li class="active"><a href="https://rubikx.github.io/bob/">Best of Both</a></li>		  
-            </ul>           
-          </div><!--/.nav-collapse -->
-          </div>     
-        </nav>  
-      </div>
-      <!-- END MENU -->
+        .status-scheduled { background-color: rgb(180, 136, 4); color: white; }
+        .status-in-progress { background-color: #4CAF50; color: black; }
+        .status-final { background-color: #f44336; color: white; }
+        .status-postponed { background-color: #9E9E9E; color: white; }
 
-      <!-- BEGIN SLIDER AREA-->
-      <div class="slider_area">
-        <!-- BEGIN SLIDER-->          
-        <div id="slides">
-          <ul class="slides-container">
+        .team-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0;
+            gap: 15px;
+        }
 
-            <!-- THE FIRST SLIDE-->
-            <li>
-              <!-- FIRST SLIDE OVERLAY -->
-              <div class="slider_overlay"></div> 
-              <!-- FIRST SLIDE MAIN IMAGE -->
-              <img src="img/full-slider/cat_face3.jpg" alt="img">
-              <!-- FIRST SLIDE CAPTION-->
-              <div class="slider_caption">
-                <h2>Hi, my name is Edison</h2>
-				<p>I am a Computing Science student at Simon Fraser University.</p>
-              </div>
-            </li>
-          </ul>
-          <!-- BEGAIN SLIDER NAVIGATION -->
-          <nav class="slides-navigation">
-            <!-- PREV IN THE SLIDE -->
-            <a class="prev" href="/item1">
-              <span class="icon-wrap"></span>
-              <h3><strong>Prev</strong></h3>
-            </a>
-            <!-- NEXT IN THE SLIDE -->
-            <a class="next" href="/item3">
-              <span class="icon-wrap"></span>
-              <h3><strong>Next</strong></h3>
-            </a>
-          </nav>       
-        </div>
-        <!-- END SLIDER-->          
-      </div>
-      <!-- END SLIDER AREA -->
-    </header>
-    <!--=========== End HEADER SECTION ================--> 
+        .team-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .logo-container {
+            margin-bottom: 8px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .team-logo {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .team-logo:hover {
+            transform: scale(1.1);
+        }
+
+        .team-name {
+            font-size: 0.9em;
+            margin: 4px 0;
+            text-align: center;
+            line-height: 1.2;
+            max-width: 100px;
+        }
+
+        .team-record {
+            font-size: 0.85em;
+            color: #888;
+            margin: 2px 0;
+        }
+
+        .score {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 4px 0;
+            position: relative;
+        }
+
+        .score::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #4CAF50;
+            transition: width 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .score:hover::after {
+            width: 80%;
+        }
+
+        .vs-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 0 0 60px;
+        }
+
+        .vs-text {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #888;
+        }
+
+        .game-time {
+            font-size: 0.8em;
+            color: #4CAF50;
+            text-align: center;
+        }
+
+        .loading-tile {
+            animation: loadingPulse 1.5s infinite;
+            height: 150px;
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #333;
+            border-top-color: #4CAF50;
+            border-radius: 50%;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+  <h1 id="current-date"></h1>
+  <div id="games"></div>
+
+  <script>
+      const API_KEY = '';
+      let standingsData = {};
+
+      // Set initial date immediately
+      document.getElementById('current-date').textContent = 
+          new Date().toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric'
+          });
+
+      function getTomorrowDate() {
+          const tomorrow = new Date();
+          tomorrow.setDate(tomorrow.getDate() + 1);
+          return tomorrow;
+      }
+
+      async function fetchStandings() {
+          const url = 'https://nba-api-free-data.p.rapidapi.com/nba-league-standings?year=2025';
+          const options = {
+              method: 'GET',
+              headers: {
+                  'X-RapidAPI-Key': API_KEY,
+                  'X-RapidAPI-Host': 'nba-api-free-data.p.rapidapi.com'
+              }
+          };
+
+          try {
+              const response = await fetch(url, options);
+              const data = await response.json();
+              standingsData = {};
+
+              data.response.standings.entries.forEach(team => {
+                  const teamId = team.team.id;
+                  standingsData[teamId] = {
+                      wins: team.stats.find(s => s.name === 'wins')?.value || 0,
+                      losses: team.stats.find(s => s.name === 'losses')?.value || 0
+                  };
+              });
+          } catch (error) {
+              console.error('Error fetching standings:', error);
+          }
+      }
+
+      async function fetchGames() {
+          const gamesContainer = document.getElementById('games');
+          gamesContainer.innerHTML = `
+              <div class="spinner"></div>
+          `;
+
+          await fetchStandings();
+
+          const tomorrow = getTomorrowDate();
+          const apiDate = `${tomorrow.getFullYear()}${(tomorrow.getMonth()+1)
+                      .toString().padStart(2,'0')}${tomorrow.getDate()
+                      .toString().padStart(2,'0')}`;
+
+          const url = `https://nba-api-free-data.p.rapidapi.com/nba-schedule-by-date?date=${apiDate}`;
+          const options = {
+              method: 'GET',
+              headers: {
+                  'X-RapidAPI-Key': API_KEY,
+                  'X-RapidAPI-Host': 'nba-api-free-data.p.rapidapi.com'
+              }
+          };
+
+          try {
+              const response = await fetch(url, options);
+              if (!response.ok) throw new Error(`API Error: ${response.status}`);
+              
+              const data = await response.json();
+              if (data?.status !== 'success') {
+                  throw new Error(data?.message || 'API returned non-success status');
+              }
+
+              const responseData = typeof data.response === 'string' ? 
+                  JSON.parse(data.response) : 
+                  data.response;
+
+              const validGames = (responseData?.Events || [])
+                  .filter(game => game?.status?.detail !== 'Postponed');
+
+              displayGames(validGames);
+          } catch (error) {
+              document.getElementById('games').innerHTML = `
+                  <div class="tile" style="color: #ff6f61">
+                      ${error.message}.<br>
+                      Try <a href="javascript:location.reload()">refreshing</a>.
+                  </div>`;
+              console.error('Error:', error);
+          }
+      }
+
+      function displayGames(games) {
+          const gamesContainer = document.getElementById('games');
+          gamesContainer.innerHTML = '';
+
+          if (!games?.length) {
+              gamesContainer.innerHTML = `
+                  <div class="tile" style="animation: fadeIn 0.6s">
+                      <div style="text-align: center; padding: 20px">
+                          🏀 No games scheduled today
+                      </div>
+                  </div>
+              `;
+              return;
+          }
+
+          games.forEach((game, index) => {
+              try {
+                  const tile = document.createElement('div');
+                  tile.className = 'tile';
+                  tile.style.animationDelay = `${index * 0.1}s`;
+                  
+                  const homeTeam = game.competitors?.find(t => t?.isHome);
+                  const awayTeam = game.competitors?.find(t => !t?.isHome);
+                  const gameDate = game?.date ? new Date(game.date) : new Date();
+                  const gameStatus = game?.status?.detail || 'Scheduled';
+
+                  const gameTime = gameDate.toLocaleTimeString('en-US', {
+                      timeZone: 'America/Los_Angeles',
+                      hour: 'numeric',
+                      minute: '2-digit'
+                  }) + ' PST';
+
+                  const homeRecord = standingsData[homeTeam?.id] || { wins: '-', losses: '-' };
+                  const awayRecord = standingsData[awayTeam?.id] || { wins: '-', losses: '-' };
+
+                  let statusClass = 'status-scheduled';
+                  let statusText = 'Scheduled';
+
+                  if (gameStatus === 'In Progress') {
+                      statusClass = 'status-in-progress';
+                      statusText = 'Live';
+                  } else if (gameStatus === 'Final') {
+                      statusClass = 'status-final';
+                      statusText = 'Final';
+                  }
 
 
-    <!--=========== BEGIN ABOUT SECTION ================-->
-    <section id="about">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 col-md-12">
-            <div class="about_area">
-              <!-- START ABOUT HEADING -->
-              <div class="heading">
-                <h2 class="wow fadeInLeftBig">Featured</h2>
-				<p>"People say that what we're all seeking is a meaning for life... I think that what we're really seeking is an experience of being alive, so that our life experiences on the purely physical plane will have resonance within our innermost being and reality, so that we can actually feel the rapture of being alive."
--- Joseph Campbell</p>
-				</div>
-				
-    <!--=========== END ABOUT SECTION ================-->
+                  tile.innerHTML = `
+                      <div class="status-tag ${statusClass}">${statusText}</div>
+                      <div class="team-info">
+                          <div class="team-card">
+                              <div class="logo-container">
+                                  <img class="team-logo" src="${awayTeam?.logo || ''}" 
+                                       alt="${awayTeam?.displayName || 'Away Team'}">
+                              </div>
+                              <div class="team-name">${awayTeam?.displayName || 'Away Team'}</div>
+                              <div class="team-record">${awayRecord.wins}-${awayRecord.losses}</div>
+                              <div class="score">${awayTeam?.score || '-'}</div>
+                          </div>
+                          
+                          <div class="vs-container">
+                              <div class="vs-text">VS</div>
+                              <div class="game-time">${gameTime}</div>
+                          </div>
 
+                          <div class="team-card">
+                              <div class="logo-container">
+                                  <img class="team-logo" src="${homeTeam?.logo || ''}" 
+                                       alt="${homeTeam?.displayName || 'Home Team'}">
+                              </div>
+                              <div class="team-name">${homeTeam?.displayName || 'Home Team'}</div>
+                              <div class="team-record">${homeRecord.wins}-${homeRecord.losses}</div>
+                              <div class="score">${homeTeam?.score || '-'}</div>
+                          </div>
+                      </div>
+                  `;
 
-     <!-- Javascript Files
-     ================================================== -->
-  
-     <!-- initialize jQuery Library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <!-- Google map -->
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
-    <script src="js/jquery.ui.map.js"></script>
-     <!-- For smooth animatin  -->
-    <script src="js/wow.min.js"></script> 
-    <!-- Bootstrap js -->
-    <script src="js/bootstrap.min.js"></script>
-    <!-- superslides slider -->
-    <script src="js/jquery.superslides.min.js" type="text/javascript"></script>
-    <!-- slick slider -->
-    <script src="js/slick.min.js"></script>    
-    <!-- for circle counter -->
-    <script src='https://cdn.rawgit.com/pguso/jquery-plugin-circliful/master/js/jquery.circliful.min.js'></script>
-    <!-- for portfolio filter gallery -->
-    <script src="js/modernizr.custom.js"></script>
-    <script src="js/classie.js"></script>
-    <script src="js/elastic_grid.min.js"></script>
-    <script src="js/portfolio_slider.js"></script>
+                  tile.addEventListener('click', () => {
+                      tile.style.transform = 'scale(0.98)';
+                      setTimeout(() => {
+                          tile.style.transform = 'scale(1)';
+                      }, 100);
+                  });
 
-    <!-- Custom js-->
-    <script src="js/custom.js"></script>
-  </body>
+                  gamesContainer.appendChild(tile);
+              } catch (error) {
+                  console.error('Error rendering game:', error);
+              }
+          });
+      }
+      fetchGames();
+  </script>
+</body>
 </html>
