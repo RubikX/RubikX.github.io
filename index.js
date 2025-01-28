@@ -1,4 +1,4 @@
-const API_KEY = process.env.API_KEY;
+const API_KEY = "";
 let standingsData = {};
 const modal = document.getElementById('boxscore-modal');
 const closeBtn = document.querySelector('.close');
